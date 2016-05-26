@@ -29,7 +29,6 @@ static int init_stmt_transducer();
 static int select_from_transducer( const char *tagname );
 static int init_stmt_data();
 static int init_stmt_trans_update();
-static int update_transducer( int flag, const char *tagname );
 static int my_chg_stmt_execute( MYSQL_STMT* *stmt );
 static void set_currenttime_sql(MYSQL_TIME *sqltm);
 static int cover_msg_struct( const struct dc_msg *msg, pMYDCCMSG dccmsg );
@@ -120,6 +119,9 @@ int init_connect_db( const int status )
 		close_statement_db( &stmt_data_ptr );
 	}
 	
+	if( init_stmt_trans_update() != DB_NOMAL_END ){			
+		return DB_ABEND;
+	}
 	db_start_status = status;
 	return DB_NOMAL_END;
 }
@@ -486,10 +488,12 @@ int init_stmt_trans_update()
 /* 		IMEI	: IMEI of the DTU being updated								 */
 /* 									 	 									 */
 /*===========================================================================*/
-int update_transducer( int flag, const char *tagname );
+int update_transducer( const int flag, const struct dc_msg *msg )
 {
-	strcpy( st_trsd_update.flag, flag );
-	upd_trans_len[0] = strlen( st_trsd_update.flag);
+	mem_reset_zero();
+	
+	st_trsd_update.flag = flag;
+	upd_trans_len[0] = 1;
 	strcpy( st_trsd_update.imei, msg->imei );	
 	upd_trans_len[1] = strlen( st_trsd_update.imei);
 	
@@ -646,4 +650,7 @@ void mem_reset_zero()
 	memset( st_trsd.memo, '\0', sizeof(st_trsd.memo) );
 	memset( st_trsd.imei, '\0', sizeof(st_trsd.imei) );
 	st_trsd.flag = 0;
+	
+	memset( st_trsd_update.imei, '\0', sizeof(st_trsd_update.imei) );
+	st_trsd_update.flag = 0;
 }

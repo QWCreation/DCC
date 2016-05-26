@@ -77,6 +77,7 @@ int query_sel_sql( const char* stringSql);
 int query_chg_sql( const char* stringSql);
 int set_query_string( char *SQL_STMTS, const char *fmt,...);
 int db_main_process( const struct dc_msg *msg );
+int update_transducer( const int flag, const struct dc_msg *msg );
 
 void free_result();
 int dis_connect_db();

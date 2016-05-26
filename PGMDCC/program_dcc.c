@@ -120,7 +120,7 @@ void receive_data(struct dc_msg *msg)
 			update_transducer( DC_MSG_ONLINE, msg );
 			break;
 		case DC_MSG_OFFLINE:
-			update_transducer( DC_MSG_ONLINE, msg );
+			update_transducer( DC_MSG_OFFLINE, msg );
 			break;
 		default:
 			break;
